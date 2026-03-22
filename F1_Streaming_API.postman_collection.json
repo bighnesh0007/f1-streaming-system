@@ -1,0 +1,295 @@
+{
+  "info": {
+    "name": "F1 Streaming System API",
+    "description": "Complete API collection for the F1 Real-Time Streaming System v2.0.\n\nEndpoints for drivers, analytics, telemetry, and health checks with pagination and filtering.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3001",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "health"]
+            },
+            "description": "Returns system health status including MySQL connectivity, uptime, and service info."
+          }
+        },
+        {
+          "name": "API Root Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": ["{{baseUrl}}"],
+              "path": [""]
+            },
+            "description": "Returns API name, version, and available endpoints."
+          }
+        }
+      ],
+      "description": "Health check and system info endpoints."
+    },
+    {
+      "name": "Drivers",
+      "item": [
+        {
+          "name": "Get All Drivers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/drivers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "drivers"]
+            },
+            "description": "List all drivers with team info. Default pagination: page=1, limit=20."
+          }
+        },
+        {
+          "name": "Get All Drivers (Paginated)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/drivers?page=1&limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "drivers"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Page number (starts at 1)" },
+                { "key": "limit", "value": "5", "description": "Results per page (max 100)" }
+              ]
+            },
+            "description": "List drivers with custom pagination. Change page and limit to navigate."
+          }
+        },
+        {
+          "name": "Get Driver by Number",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/drivers/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "drivers", "1"]
+            },
+            "description": "Get a single driver by driver_number. Replace '1' with any valid driver number (e.g., 1, 4, 11, 16, 44, 55, 63, 81)."
+          }
+        },
+        {
+          "name": "Get Driver #44 (Hamilton)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/drivers/44",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "drivers", "44"]
+            },
+            "description": "Example: Get Lewis Hamilton's data."
+          }
+        },
+        {
+          "name": "Get Driver #1 (Verstappen)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/drivers/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "drivers", "1"]
+            },
+            "description": "Example: Get Max Verstappen's data."
+          }
+        }
+      ],
+      "description": "Driver data endpoints with filtering and pagination."
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Get All Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analytics"]
+            },
+            "description": "List all analytics records with driver and session info. Default pagination: page=1, limit=20."
+          }
+        },
+        {
+          "name": "Get All Analytics (Paginated)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analytics"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Page number" },
+                { "key": "limit", "value": "10", "description": "Results per page (max 100)" }
+              ]
+            },
+            "description": "Paginated analytics with driver names, team, and session info."
+          }
+        },
+        {
+          "name": "Get Analytics by Driver Number",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analytics", "1"]
+            },
+            "description": "Get all analytics for a specific driver. Replace '1' with any driver_number.\n\nReturns: avg_speed, max_speed, min_speed, avg_throttle, avg_rpm, lap_consistency, prediction_score."
+          }
+        },
+        {
+          "name": "Get Analytics by Session",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/session/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analytics", "session", "1"]
+            },
+            "description": "Get analytics for all drivers in a specific session. Replace '1' with a valid session_id.\n\nResults sorted by prediction_score descending (best performers first)."
+          }
+        }
+      ],
+      "description": "Computed analytics endpoints — avg/max speed, lap consistency, ML prediction scores."
+    },
+    {
+      "name": "Telemetry",
+      "item": [
+        {
+          "name": "Get Latest Telemetry",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/telemetry/latest",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "telemetry", "latest"]
+            },
+            "description": "Get the most recent telemetry readings across all drivers.\n\nReturns: speed, throttle, brake, rpm, gear, drs."
+          }
+        },
+        {
+          "name": "Get Latest Telemetry (Custom Limit)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/telemetry/latest?limit=50",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "telemetry", "latest"],
+              "query": [
+                { "key": "limit", "value": "50", "description": "Number of records (max 100)" }
+              ]
+            },
+            "description": "Latest telemetry with custom result limit."
+          }
+        },
+        {
+          "name": "Get Telemetry by Driver",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/telemetry/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "telemetry", "1"]
+            },
+            "description": "Get telemetry data for a specific driver. Replace '1' with any driver_number.\n\nReturns speed, throttle, brake, rpm, gear, drs readings."
+          }
+        },
+        {
+          "name": "Get Telemetry by Driver (Filtered)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/telemetry/1?limit=200&session_id=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "telemetry", "1"],
+              "query": [
+                { "key": "limit", "value": "200", "description": "Number of records (max 500)" },
+                { "key": "session_id", "value": "1", "description": "Filter by session ID" }
+              ]
+            },
+            "description": "Get telemetry for a specific driver filtered by session, with custom limit."
+          }
+        }
+      ],
+      "description": "Raw telemetry data — speed, throttle, brake, RPM, gear, DRS."
+    },
+    {
+      "name": "Error Cases",
+      "item": [
+        {
+          "name": "Invalid Driver Number",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/drivers/abc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "drivers", "abc"]
+            },
+            "description": "Test: Should return 400 Bad Request with 'Invalid driver number' message."
+          }
+        },
+        {
+          "name": "Non-existent Driver",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/drivers/999",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "drivers", "999"]
+            },
+            "description": "Test: Should return 404 Not Found."
+          }
+        },
+        {
+          "name": "Non-existent Route",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/nonexistent",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "nonexistent"]
+            },
+            "description": "Test: Should return 404 with structured error response."
+          }
+        }
+      ],
+      "description": "Test error handling — validation errors, 404s, invalid inputs."
+    }
+  ]
+}
